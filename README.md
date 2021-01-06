@@ -1,6 +1,8 @@
 # text-adversarial-training
 
-对抗训练在NLP中的应用。这里提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。在Tensorflow2.x上实现很简单，具体见文件`adversarial_trainer.py`。
+对抗训练在NLP中的应用。这里提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。
+
+在Tensorflow2.x上实现很简单，具体见文件`adversarial_trainer.py`。
 
 `AdversarialTrainer`类的使用，假设已经实现好模型的输入和输出，那么
 
@@ -31,5 +33,7 @@ $ python3 adversarial_training.py
 ## 参考
 
 [1] https://tensorflow.google.cn/tutorials/generative/adversarial_fgsm?hl=en
+
 [2] [Explaining and Harnessing Adversarial Examples](https://arxiv.org/abs/1412.6572)
+
 [3] [Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)
