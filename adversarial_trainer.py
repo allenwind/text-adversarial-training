@@ -10,7 +10,7 @@ class AdversarialTrainer(tf.keras.Model):
         loss,
         metrics,
         embedding_name="embedding",
-        epsilon=0.5):
+        epsilon=1.0):
         super(AdversarialTrainer, self).compile(
             optimizer=optimizer,
             loss=loss,
@@ -30,7 +30,7 @@ class AdversarialTrainer(tf.keras.Model):
             loss = self.compiled_loss(y, y_pred)
         grads = tape.gradient(loss, embeddings) # 计算Embedding梯度
         grads = tf.zeros_like(grads) + grads
-        delta = self.epsilon * grads / (tf.norm(grads) + 1e-8) # 计算扰动
+        delta = self.epsilon * grads / (tf.norm(grads) + 1e-6) # 计算扰动
         embeddings.assign_add(delta) # 添加扰动到Embedding矩阵
         results = super(AdversarialTrainer, self).train_step(data) # 执行普通的train_step
         embeddings.assign_sub(delta) # 删除Embedding矩阵上的扰动

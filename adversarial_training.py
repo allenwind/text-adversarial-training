@@ -80,7 +80,7 @@ if adversarial:
     model.compile(loss="categorical_crossentropy",
                   optimizer="adam",
                   metrics=["accuracy"],
-                  epsilon=0.5)
+                  epsilon=0.9)
 else:
     model = Model(inputs, outputs)
     model.compile(loss="categorical_crossentropy",
