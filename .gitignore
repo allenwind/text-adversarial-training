@@ -1,3 +1,9 @@
+# self
+test.py
+old_adversarial.py
+old_adversarial2.py
+virtual_adversarial_training.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
