@@ -26,7 +26,7 @@ class AdversarialTrainer(tf.keras.Model):
         x, y = data
         with tf.GradientTape() as tape:
             tape.watch(embeddings)
-            y_pred = self(x, training=False)
+            y_pred = self(x, training=True)
             loss = self.compiled_loss(y, y_pred)
         grads = tape.gradient(loss, embeddings) # 计算Embedding梯度
         grads = tf.zeros_like(grads) + grads
