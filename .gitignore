@@ -1,8 +1,5 @@
 # self
-test.py
-old_adversarial.py
-old_adversarial2.py
-virtual_adversarial_training.py
+old_*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

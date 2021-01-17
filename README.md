@@ -1,10 +1,14 @@
 # text-adversarial-training
 
-对抗训练在NLP中的应用。这里提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。
+在NLP中，对抗训练可以看做是一种正则化方法。此外还包括正则化方法：
+- 随机噪声
+- 对抗训练
+- 梯度惩罚
+- 虚拟对抗训练
 
-在Tensorflow2.x上实现很简单，具体见文件`adversarial_trainer.py`。
+这里实现对抗训练在NLP中的应用。此处提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。
 
-`AdversarialTrainer`类的使用，假设已经实现好模型的输入和输出，那么
+在Tensorflow2.x上实现很简单，具体见文件`adversarial_training.py`中的`AdversarialTrainer`类。`AdversarialTrainer`使用方法和`tf.keras.Model`一致。假设已经实现好模型的输入和输出，那么
 
 ```python
 model = AdversarialTrainer(inputs, outputs)

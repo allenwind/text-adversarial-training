@@ -14,7 +14,6 @@ from tensorflow.keras.layers import *
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 
-from adversarial_trainer import AdversarialTrainer
 from pooling import MaskGlobalMaxPooling1D
 from pooling import MaskGlobalAveragePooling1D
 from dataset import SimpleTokenizer, find_best_maxlen
@@ -26,16 +25,53 @@ from dataset import load_hotel_comment
 # baseline 0.880625
 # adversarial 0.892525
 
+class AdversarialTrainer(tf.keras.Model):
+    """对抗训练器，像tf.keras.Model一样使用，
+    这里实现的是Fast Gradient Method。"""
+
+    def compile(
+        self,
+        optimizer,
+        loss,
+        metrics,
+        embedding_name="embedding",
+        epsilon=1.0):
+        super(AdversarialTrainer, self).compile(
+            optimizer=optimizer,
+            loss=loss,
+            metrics=metrics
+        )
+        self.epsilon = epsilon
+        # 需要注意Embedding的名称，以便搜索该层
+        self.embedding_name = embedding_name
+
+    def train_step(self, data):
+        embedding_layer = self.get_layer(self.embedding_name)
+        embeddings = embedding_layer.embeddings
+        x, y = data
+        with tf.GradientTape() as tape:
+            tape.watch(embeddings)
+            y_pred = self(x, training=True)
+            loss = self.compiled_loss(y, y_pred)
+        grads = tape.gradient(loss, embeddings) # 计算Embedding梯度
+        grads = tf.convert_to_tensor(grads)
+        # grads = tf.zeros_like(grads) + grads
+        delta = self.epsilon * grads / (tf.norm(grads) + 1e-6) # 计算扰动
+        embeddings.assign_add(delta) # 添加扰动到Embedding矩阵
+        results = super(AdversarialTrainer, self).train_step(data) # 执行普通的train_step
+        embeddings.assign_sub(delta) # 删除Embedding矩阵上的扰动
+        return results
+
 X, y, classes = load_hotel_comment()
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, train_size=0.8, random_state=7384672)
+    X, y, train_size=0.6, random_state=7384672)
 
 num_classes = len(classes)
 tokenizer = SimpleTokenizer()
 tokenizer.fit(X_train)
 
-# maxlen = find_best_maxlen(X_train)
-maxlen = 256
+maxlen = find_best_maxlen(X_train)
+# maxlen = 256
 
 def create_dataset(X, y, maxlen=maxlen):
     X = tokenizer.transform(X)

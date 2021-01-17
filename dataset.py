@@ -66,7 +66,7 @@ def load_hotel_comment(file=_HOTEL):
     return X, y, categoricals
 
 _w100k = "/home/zhiwen/workspace/dataset/classification/weibo_senti_100k/weibo_senti_100k.csv"
-def load_weibo_senti_100k(file=_w100k, noe=False):
+def load_weibo_senti_100k(file=_w100k, noe=True):
     df = pd.read_csv(file)
     X = df.review.to_list()
     y = df.label.to_list()
