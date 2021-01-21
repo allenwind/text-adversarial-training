@@ -6,7 +6,7 @@
 - 梯度惩罚
 - 虚拟对抗训练
 
-这里实现对抗训练在NLP中的应用。此处提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。
+这里实现对抗训练和梯度惩罚在NLP中的应用。此处提供的实现是把扰动加到Embedding矩阵上，即论文[Adversarial Training Methods for Semi-Supervised Text Classification](https://arxiv.org/abs/1605.07725)上的思路。
 
 在Tensorflow2.x上实现很简单，具体见文件`adversarial_training.py`中的`AdversarialTrainer`类。`AdversarialTrainer`使用方法和`tf.keras.Model`一致。假设已经实现好模型的输入和输出，那么
 
@@ -27,6 +27,13 @@ model.fit(X, y)
 ```bash
 $ python3 adversarial_training.py
 ```
+
+梯度梯度惩罚运行，
+
+```bash
+$ python3 gradient_penalty.py
+```
+
 
 具体可参看源码。
 
