@@ -7,6 +7,8 @@ from sklearn import metrics
 
 from dataset import load_THUCNews_title_label
 from dataset import load_hotel_comment
+from dataset import load_weibo_senti_100k
+from dataset import load_simplifyweibo_4_moods
 from dataset import SimpleTokenizer, find_best_maxlen
 from pooling import MaskGlobalMaxPooling1D
 
@@ -30,8 +32,7 @@ class GradientPenalty(tf.keras.Model):
             loss = self.compiled_loss(y, y_pred)
 
         grads = tape.gradient(loss, embeddings)
-        gp = tf.sqrt(tf.reduce_sum(tf.square(grads), axis=[0, 1]))
-        # gp = tf.reduce_mean((gp - 1.0) ** 2)
+        gp = tf.reduce_sum(tf.square(grads))
         return gp
 
     def train_step(self, data):
@@ -53,7 +54,11 @@ class GradientPenalty(tf.keras.Model):
 # 处理数据
 X, y, classes = load_hotel_comment()
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, train_size=0.8, random_state=732)
+    X,
+    y,
+    train_size=0.8,
+    random_state=7432
+)
 
 num_classes = len(classes)
 # 转化成字id
@@ -63,7 +68,7 @@ X_train = tokenizer.transform(X_train)
 X_test = tokenizer.transform(X_test)
 
 maxlen = find_best_maxlen(X_train, mode="max")
-# maxlen = 128
+maxlen = 128
 
 X_train = sequence.pad_sequences(
     X_train,
